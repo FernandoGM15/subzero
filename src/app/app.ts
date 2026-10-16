@@ -6,9 +6,10 @@ import { Input } from './shared/ui/input';
 import { Select, SelectOption } from './shared/ui/select';
 import { Autocomplete, AutocompleteFn } from './shared/ui/autocomplete';
 import { of } from 'rxjs';
+import { MoneyInput } from './shared/ui/money-input';
 
 @Component({
-  imports: [RouterOutlet, Button, Spinner, Input, Select, Autocomplete],
+  imports: [RouterOutlet, Button, Spinner, Input, Select, Autocomplete, MoneyInput],
   selector: 'app-root',
   template: `
     <div class="flex flex-col p-4">
@@ -32,6 +33,7 @@ import { of } from 'rxjs';
         <app-input label="Password" type="password" />
         <app-input label="Email" type="email" />
         <app-input label="Search" type="search" />
+        <app-money-input label="Pago minimo" />
       </div>
 
       <span class="text-xl mb-2 mt-2">Select</span>

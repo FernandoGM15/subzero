@@ -22,6 +22,8 @@ y búsqueda se mantienen; las demás piezas se desarrollarán cuando las necesit
 | Select         | `shared/ui/select/`          | Selección simple con panel propio (Aria/CDK); valores primitivos, Signal Forms y catálogos del consumidor. |
 | FieldContainer | `shared/ui/field-container/` | Presentación compartida de Input y Select por composición.                                                 |
 
+MoneyInput también está implementado en `shared/ui/money-input/`: punto decimal y modelo de centavos enteros o null.
+
 `shared/ui/sizing.ts` también existe: es un módulo de tokens compartidos, no un componente.
 Todas las ubicaciones de este documento son relativas a `src/app/`.
 
@@ -30,22 +32,22 @@ Todas las ubicaciones de este documento son relativas a `src/app/`.
 Las ubicaciones siguientes son propuestas organizativas, no APIs ya aprobadas. Antes de crear
 cada componente, definir su contrato y accesibilidad en `docs/ui-kit.md`.
 
-| Componente       | Ubicación propuesta            | Necesidad / alcance                                                                                                                                       |
-| ---------------- | ------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Autocomplete     | `shared/ui/autocomplete/`      | Búsqueda y selección con opciones suministradas por el consumidor; dirección acordada en este roadmap.                                                    |
-| MoneyInput       | `shared/ui/money-input/`       | Captura monetaria separada del texto; contrato de conversión a centavos pendiente, sin reglas de negocio internas; RF-B1.                                 |
-| DateInput        | `shared/ui/date-input/`        | Selección de fecha de calendario; empezar por un control nativo y definir el contrato ISO `YYYY-MM-DD`; RF-B1.                                            |
-| Card             | `shared/ui/card/`              | Contenedor visual con contenido proyectado, sin datos ni cálculos de suscripciones; RF-A y RF-C3.                                                         |
-| Badge            | `shared/ui/badge/`             | Indicador visual genérico; el consumidor traduce estado de negocio a texto e intención visual. Previsto en arquitectura.                                  |
-| Dialog / Modal   | `shared/ui/modal/`             | Contenedor modal accesible para confirmaciones y, si se elige ese flujo, formularios; RF-B3. Un solo componente base, no dos implementaciones duplicadas. |
-| Table            | `shared/ui/table/`             | Columnas y filas genéricas con ordenamiento, sin conocer el modelo Subscription; RF-C1.                                                                   |
-| Pagination       | `shared/ui/pagination/`        | Navegación de páginas y estado de página/tamaño suministrado por el consumidor; RF-C1.                                                                    |
-| SegmentedControl | `shared/ui/segmented-control/` | Elección genérica entre opciones excluyentes, inicialmente tabla/cards; RF-C3. Crear solo si aporta reutilización frente a componer Button.               |
-| Skeleton         | `shared/ui/skeleton/`          | Placeholder visual de carga para bloques de contenido; NFR de estados de UI.                                                                              |
-| EmptyState       | `shared/ui/empty-state/`       | Mensaje, contenido y acción para ausencia de datos, definidos por el consumidor; NFR de estados de UI.                                                    |
-| Chart            | `shared/ui/chart/`             | Wrapper de ECharts: inicializar, actualizar y destruir la instancia. Datos y agrupaciones pertenecen al dashboard; RF-A4.                                 |
-| Toast            | `shared/ui/toast/`             | Presentación accesible de avisos temporales. Previsto en arquitectura; prioridad y mecanismo de coordinación pendientes.                                  |
-| Avatar           | `shared/ui/avatar/`            | Representación visual genérica de imagen o iniciales. Previsto en arquitectura; condicionado a una necesidad real de usuarios/perfiles.                   |
+| Componente       | Ubicación propuesta              | Necesidad / alcance                                                                                                                                                      |
+| ---------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Autocomplete     | `shared/ui/autocomplete/`        | Búsqueda y selección con opciones suministradas por el consumidor; dirección acordada en este roadmap.                                                                   |
+| Numeric Input    | `shared/ui/input/` (por evaluar) | Entrada numérica genérica, independiente de MoneyInput. Definir modelo `number` o `null`, conversión, valor vacío y atributos `min`, `max`, `step` antes de implementar. |
+| DateInput        | `shared/ui/date-input/`          | Selección de fecha de calendario; empezar por un control nativo y definir el contrato ISO `YYYY-MM-DD`; RF-B1.                                                           |
+| Card             | `shared/ui/card/`                | Contenedor visual con contenido proyectado, sin datos ni cálculos de suscripciones; RF-A y RF-C3.                                                                        |
+| Badge            | `shared/ui/badge/`               | Indicador visual genérico; el consumidor traduce estado de negocio a texto e intención visual. Previsto en arquitectura.                                                 |
+| Dialog / Modal   | `shared/ui/modal/`               | Contenedor modal accesible para confirmaciones y, si se elige ese flujo, formularios; RF-B3. Un solo componente base, no dos implementaciones duplicadas.                |
+| Table            | `shared/ui/table/`               | Columnas y filas genéricas con ordenamiento, sin conocer el modelo Subscription; RF-C1.                                                                                  |
+| Pagination       | `shared/ui/pagination/`          | Navegación de páginas y estado de página/tamaño suministrado por el consumidor; RF-C1.                                                                                   |
+| SegmentedControl | `shared/ui/segmented-control/`   | Elección genérica entre opciones excluyentes, inicialmente tabla/cards; RF-C3. Crear solo si aporta reutilización frente a componer Button.                              |
+| Skeleton         | `shared/ui/skeleton/`            | Placeholder visual de carga para bloques de contenido; NFR de estados de UI.                                                                                             |
+| EmptyState       | `shared/ui/empty-state/`         | Mensaje, contenido y acción para ausencia de datos, definidos por el consumidor; NFR de estados de UI.                                                                   |
+| Chart            | `shared/ui/chart/`               | Wrapper de ECharts: inicializar, actualizar y destruir la instancia. Datos y agrupaciones pertenecen al dashboard; RF-A4.                                                |
+| Toast            | `shared/ui/toast/`               | Presentación accesible de avisos temporales. Previsto en arquitectura; prioridad y mecanismo de coordinación pendientes.                                                 |
+| Avatar           | `shared/ui/avatar/`              | Representación visual genérica de imagen o iniciales. Previsto en arquitectura; condicionado a una necesidad real de usuarios/perfiles.                                  |
 
 ### Orden orientativo del resto del kit
 

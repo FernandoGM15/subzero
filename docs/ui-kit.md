@@ -596,3 +596,44 @@ readonly searchCompanies: AutocompleteFn = ({ query, offset, limit }) => {
 
 For Signal Forms, bind `[formField]="fields.company"` instead of `[(value)]`. The feature owns
 the HTTP client and its Company DTO; the shared component only sees query/page metadata and options.
+
+## MoneyInput
+
+**Propósito**: editar importes con punto decimal y exponer centavos enteros, sin reglas de negocio
+ni selección de moneda. Reutiliza FieldContainer; no modifica el contrato de Input.
+
+### API (`app-money-input`)
+
+| Input / model / output               | Type                   | Default     | Description                                         |
+| ------------------------------------ | ---------------------- | ----------- | --------------------------------------------------- |
+| `label`                              | `string`               | required    | Accessible floating label.                          |
+| `value`                              | `number \| null` model | `null`      | Safe integer cents; null represents an empty field. |
+| `size`                               | `ControlSize`          | `'md'`      | Shared control dimensions.                          |
+| `placeholder`, `helperText`, `error` | `string \| undefined`  | `undefined` | Consumer-owned guidance and validation.             |
+| `disabled`, `readonly`, `required`   | `boolean`              | `false`     | Native interaction and presentation states.         |
+| `reserveMessageSpace`                | `boolean`              | `true`      | Reserve message height.                             |
+| `touch`                              | output `void`          | —           | Emitted on blur.                                    |
+
+### Variantes / Tamaños / Estados
+
+Admite punto decimal, hasta dos decimales y signo negativo opcional; la feature decide si permite
+importes negativos. Muestra comas de agrupación mientras se escribe y conserva la posición del cursor y la selección.
+Acepta pegado con agrupaciones de tres dígitos (`1,234.56`); rechaza comas decimales y agrupaciones
+mal formadas. No admite exponentes ni valores fuera del rango de enteros seguros. Una edición no admitida conserva el texto y valor anteriores. Los estados intermedios
+`.` y `-` se conservan mientras se escribe y representan `null`. Al perder el foco se muestra el
+valor con dos decimales, o vacío si es null. Los valores externos deben ser centavos enteros seguros.
+
+### Accesibilidad
+
+Input nativo de texto con `inputmode="decimal"`, label asociado y mensajes mediante FieldContainer.
+Conserva required, invalid, disabled y readonly. Implementa `FormValueControl<number | null>`.
+
+### Ejemplo
+
+```html
+<app-money-input label="Amount" [(value)]="amountCents" />
+```
+
+Usar `[formField]` o `[(value)]`, nunca ambos. `12.50` produce `1250`; vacío produce `null`.
+
+MoneyInput: `1,234,567.89` es texto de presentación; el modelo emite `123456789` centavos.
