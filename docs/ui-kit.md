@@ -21,6 +21,7 @@ Contrato de los componentes de `src/app/shared/ui`.
 | [Input](#input)                   | `app-input`           | Implementado         | [input.spec.ts](../src/app/shared/ui/input/input.spec.ts)                               |
 | [Select](#select)                 | `app-select`          | Implementado         | [select.spec.ts](../src/app/shared/ui/select/select.spec.ts)                            |
 | [FieldContainer](#fieldcontainer) | `app-field-container` | Interno implementado | [field-container.spec.ts](../src/app/shared/ui/field-container/field-container.spec.ts) |
+| [DatePicker](#datepicker)         | `app-date-picker`     | Implementado         | [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)             |
 
 ## Uso rápido
 
@@ -637,3 +638,63 @@ Conserva required, invalid, disabled y readonly. Implementa `FormValueControl<nu
 Usar `[formField]` o `[(value)]`, nunca ambos. `12.50` produce `1250`; vacío produce `null`.
 
 MoneyInput: `1,234,567.89` es texto de presentación; el modelo emite `123456789` centavos.
+
+## DatePicker
+
+**Propósito**: seleccionar una fecha de calendario en un panel propio de estilo compacto.
+No hay entrada de texto editable. Sustituye al DateInput nativo provisional.
+
+### API (`app-date-picker`)
+
+| Input / model / output             | Tipo                  | Default        | Descripción                                                                   |
+| ---------------------------------- | --------------------- | -------------- | ----------------------------------------------------------------------------- |
+| `label`                            | `string`              | Obligatorio    | Label visible y nombre del calendario.                                        |
+| `value`                            | `string` model        | `''`           | Fecha ISO `YYYY-MM-DD`; vacío como cadena vacía.                              |
+| `displayFormat`                    | `DateDisplayFormat`   | `'dd/MM/yyyy'` | `'dd/MM/yyyy'`, `'MM/dd/yyyy'` o `'yyyy-MM-dd'`. Solo afecta la presentación. |
+| `locale`                           | `string`              | `'en-US'`      | Configuración regional para nombres de días y meses.                          |
+| `min`, `max`                       | `string \| undefined` | `undefined`    | Límites ISO inclusivos de selección.                                          |
+| `size`                             | `ControlSize`         | `'md'`         | Dimensiones compartidas del disparador.                                       |
+| `helperText`, `error`              | `string \| undefined` | `undefined`    | Mensajes controlados por el consumidor.                                       |
+| `disabled`, `readonly`, `required` | `boolean`             | `false`        | Estados del control. Readonly conserva el foco, pero impide abrir.            |
+| `reserveMessageSpace`              | `boolean`             | `true`         | Reserva de altura para mensajes.                                              |
+| `touch`                            | output `void`         | —              | Al salir del control o cerrar el panel.                                       |
+
+### Variantes / Tamaños / Estados
+
+El disparador tiene un ancho base de `12rem`, limitado al ancho del contenedor, y no se comprime
+en filas flex. El icono conserva su ancho y el label no se divide en líneas. En filas de varios
+controles, el consumidor debe permitir salto de línea o utilizar una cuadrícula adaptable.
+
+Los días y las flechas de navegación habilitados usan cursor pointer y hover con tokens semánticos
+existentes (`surface-muted`; `primary-hover` para el día seleccionado). Los controles deshabilitados
+no reaccionan al hover y muestran cursor de acción no disponible.
+
+Selección de una fecha, sin rangos ni presets. El botón muestra la fecha con el formato configurado;
+el modelo y los límites siguen siendo ISO, sin horas ni zonas horarias. Los valores externos deben
+ser fechas válidas de cuatro dígitos de año (`0001`–`9999`). El calendario usa semanas de domingo
+a sábado. Una selección externa fuera de límites no se corrige silenciosamente: el consumidor
+conserva su validación; el panel enfoca la fecha permitida más cercana. Un rango imposible no abre.
+
+### Accesibilidad
+
+Botón con nombre y fecha seleccionada, `aria-haspopup="dialog"` y estado expandido. El panel modal
+usa CDK Overlay y gestión de foco de CDK; Escape/clic exterior cierran sin cambiar el valor. El foco
+vuelve al botón al cerrar. Un solo día está en la secuencia de Tab; las flechas navegan por días y
+semanas, Home/End por los extremos de semana, PageUp/PageDown por meses y Shift por años. Enter o
+Espacio seleccionan. La navegación cambia el foco, nunca el valor. Los días fuera de límites están
+deshabilitados. No editable no significa inaccesible por teclado. Verificar en navegador y lector
+de pantalla antes de considerar completada la validación de accesibilidad.
+
+### Ejemplo
+
+```html
+<app-date-picker
+  label="Payment date"
+  [(value)]="paymentDate"
+  displayFormat="dd/MM/yyyy"
+  min="2026-01-01"
+/>
+```
+
+Implementa `FormValueControl<string>`; usar `[formField]` o `[(value)]`, no ambos.
+`focus(options?)` enfoca el disparador. Importar DatePicker y DateDisplayFormat desde su barrel.

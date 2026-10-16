@@ -24,6 +24,8 @@ y búsqueda se mantienen; las demás piezas se desarrollarán cuando las necesit
 
 MoneyInput también está implementado en `shared/ui/money-input/`: punto decimal y modelo de centavos enteros o null.
 
+DatePicker está implementado en `shared/ui/date-picker/`: panel de calendario propio, formato visible configurable y valor ISO `YYYY-MM-DD` o cadena vacía.
+
 `shared/ui/sizing.ts` también existe: es un módulo de tokens compartidos, no un componente.
 Todas las ubicaciones de este documento son relativas a `src/app/`.
 
@@ -36,7 +38,6 @@ cada componente, definir su contrato y accesibilidad en `docs/ui-kit.md`.
 | ---------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Autocomplete     | `shared/ui/autocomplete/`        | Búsqueda y selección con opciones suministradas por el consumidor; dirección acordada en este roadmap.                                                                   |
 | Numeric Input    | `shared/ui/input/` (por evaluar) | Entrada numérica genérica, independiente de MoneyInput. Definir modelo `number` o `null`, conversión, valor vacío y atributos `min`, `max`, `step` antes de implementar. |
-| DateInput        | `shared/ui/date-input/`          | Selección de fecha de calendario; empezar por un control nativo y definir el contrato ISO `YYYY-MM-DD`; RF-B1.                                                           |
 | Card             | `shared/ui/card/`                | Contenedor visual con contenido proyectado, sin datos ni cálculos de suscripciones; RF-A y RF-C3.                                                                        |
 | Badge            | `shared/ui/badge/`               | Indicador visual genérico; el consumidor traduce estado de negocio a texto e intención visual. Previsto en arquitectura.                                                 |
 | Dialog / Modal   | `shared/ui/modal/`               | Contenedor modal accesible para confirmaciones y, si se elige ese flujo, formularios; RF-B3. Un solo componente base, no dos implementaciones duplicadas.                |
@@ -53,7 +54,7 @@ cada componente, definir su contrato y accesibilidad en `docs/ui-kit.md`.
 
 1. **Base de campos:** definir `FieldContainer` y planificar la extracción de la presentación de
    Input sin cambiar su contrato público, antes de duplicarla en Select.
-2. **Formularios:** MoneyInput y DateInput, además de Select y Autocomplete según el plan detallado.
+2. **Formularios:** MoneyInput y DatePicker, además de Select y Autocomplete según el plan detallado.
 3. **Presentación y estados:** Card, Badge, Skeleton y EmptyState.
 4. **Gestión de suscripciones:** Dialog/Modal, Table y Pagination; evaluar SegmentedControl.
 5. **Dashboard:** Chart, manteniendo los cálculos fuera del kit.

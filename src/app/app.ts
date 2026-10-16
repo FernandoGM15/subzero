@@ -7,9 +7,10 @@ import { Select, SelectOption } from './shared/ui/select';
 import { Autocomplete, AutocompleteFn } from './shared/ui/autocomplete';
 import { of } from 'rxjs';
 import { MoneyInput } from './shared/ui/money-input';
+import { DatePicker } from './shared/ui/date-picker';
 
 @Component({
-  imports: [RouterOutlet, Button, Spinner, Input, Select, Autocomplete, MoneyInput],
+  imports: [RouterOutlet, Button, Spinner, Input, Select, Autocomplete, MoneyInput, DatePicker],
   selector: 'app-root',
   template: `
     <div class="flex flex-col p-4">
@@ -28,12 +29,13 @@ import { MoneyInput } from './shared/ui/money-input';
       </div>
 
       <span class="text-xl mb-2 mt-2">Inputs</span>
-      <div class="flex gap-2">
+      <div class="flex flex-wrap gap-2">
         <app-input label="Text" type="text" placeholder="input a text here..." clearable />
         <app-input label="Password" type="password" />
         <app-input label="Email" type="email" />
         <app-input label="Search" type="search" />
         <app-money-input label="Pago minimo" />
+        <app-date-picker label="Fecha de pago" locale="es-MX" />
       </div>
 
       <span class="text-xl mb-2 mt-2">Select</span>
