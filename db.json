@@ -1,0 +1,148 @@
+{
+  "subscriptions": [
+    {
+      "id": 1,
+      "name": "Netflix",
+      "amountCents": 1799,
+      "currency": "EUR",
+      "billingCycle": "MONTHLY",
+      "startDate": "2023-01-15",
+      "nextBillingDate": "2026-11-15",
+      "status": "ACTIVE",
+      "categoryId": 1,
+      "paymentMethodId": 1,
+      "notes": "Plan Estándar con anuncios"
+    },
+    {
+      "id": 2,
+      "name": "Spotify",
+      "amountCents": 1099,
+      "currency": "EUR",
+      "billingCycle": "MONTHLY",
+      "startDate": "2022-06-01",
+      "nextBillingDate": "2026-11-01",
+      "status": "ACTIVE",
+      "categoryId": 2,
+      "paymentMethodId": 1,
+      "notes": "Premium Individual"
+    },
+    {
+      "id": 3,
+      "name": "Adobe Creative Cloud",
+      "amountCents": 5999,
+      "currency": "EUR",
+      "billingCycle": "MONTHLY",
+      "startDate": "2021-09-10",
+      "nextBillingDate": "2026-11-10",
+      "status": "ACTIVE",
+      "categoryId": 3,
+      "paymentMethodId": 2,
+      "notes": "Plan Fotografía"
+    },
+    {
+      "id": 4,
+      "name": "iCloud+ 2TB",
+      "amountCents": 999,
+      "currency": "EUR",
+      "billingCycle": "MONTHLY",
+      "startDate": "2020-03-20",
+      "nextBillingDate": "2026-11-20",
+      "status": "ACTIVE",
+      "categoryId": 5,
+      "paymentMethodId": 3,
+      "notes": "Almacenamiento familiar"
+    },
+    {
+      "id": 5,
+      "name": "GitHub Copilot",
+      "amountCents": 1000,
+      "currency": "EUR",
+      "billingCycle": "MONTHLY",
+      "startDate": "2023-11-05",
+      "nextBillingDate": "2026-11-05",
+      "status": "ACTIVE",
+      "categoryId": 3,
+      "paymentMethodId": 2,
+      "notes": "Plan Individual"
+    },
+    {
+      "id": 6,
+      "name": "Amazon Prime",
+      "amountCents": 4990,
+      "currency": "EUR",
+      "billingCycle": "YEARLY",
+      "startDate": "2021-02-12",
+      "nextBillingDate": "2027-02-12",
+      "status": "ACTIVE",
+      "categoryId": 1,
+      "paymentMethodId": 1,
+      "notes": "Envío + Prime Video"
+    },
+    {
+      "id": 7,
+      "name": "Notion Plus",
+      "amountCents": 9600,
+      "currency": "EUR",
+      "billingCycle": "YEARLY",
+      "startDate": "2024-05-08",
+      "nextBillingDate": "2027-05-08",
+      "status": "ACTIVE",
+      "categoryId": 3,
+      "paymentMethodId": 2,
+      "notes": "Plan anual con IA"
+    },
+    {
+      "id": 8,
+      "name": "Gimnasio",
+      "amountCents": 2990,
+      "currency": "EUR",
+      "billingCycle": "MONTHLY",
+      "startDate": "2025-01-02",
+      "nextBillingDate": "2026-10-02",
+      "status": "PAUSED",
+      "categoryId": 4,
+      "paymentMethodId": 4,
+      "notes": "Cuota mensual (pausada)"
+    },
+    {
+      "id": 9,
+      "name": "The New York Times",
+      "amountCents": 2500,
+      "currency": "EUR",
+      "billingCycle": "QUARTERLY",
+      "startDate": "2022-08-30",
+      "nextBillingDate": "2026-11-30",
+      "status": "CANCELLED",
+      "categoryId": 6,
+      "paymentMethodId": 1,
+      "notes": "Cancelada tras subida de precio"
+    },
+    {
+      "id": 10,
+      "name": "Duolingo Super",
+      "amountCents": 6999,
+      "currency": "EUR",
+      "billingCycle": "YEARLY",
+      "startDate": "2024-09-14",
+      "nextBillingDate": "2026-09-14",
+      "status": "ACTIVE",
+      "categoryId": 6,
+      "paymentMethodId": 4,
+      "notes": "Renovación pendiente de revisar"
+    }
+  ],
+  "categories": [
+    { "id": 1, "name": "Streaming", "color": "#e5484d", "icon": "device-tv" },
+    { "id": 2, "name": "Música", "color": "#30a46c", "icon": "music" },
+    { "id": 3, "name": "Software", "color": "#0091ff", "icon": "app-window" },
+    { "id": 4, "name": "Salud y fitness", "color": "#f76b15", "icon": "barbell" },
+    { "id": 5, "name": "Cloud y almacenamiento", "color": "#8e4ec6", "icon": "cloud" },
+    { "id": 6, "name": "Otros", "color": "#8d8d8d", "icon": "dots" }
+  ],
+  "paymentMethods": [
+    { "id": 1, "name": "Visa •••• 4242", "type": "CARD" },
+    { "id": 2, "name": "Mastercard •••• 5555", "type": "CARD" },
+    { "id": 3, "name": "Apple Pay", "type": "WALLET" },
+    { "id": 4, "name": "PayPal", "type": "WALLET" }
+  ]
+}

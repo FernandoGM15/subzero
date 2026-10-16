@@ -6,30 +6,49 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "ng lint",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "mock": "json-server --watch db.json --port 3000"
   },
   "private": true,
-  "packageManager": "npm@11.19.0",
+  "packageManager": "pnpm@12.11.2",
   "dependencies": {
+    "@angular/aria": "22.2.3",
+    "@angular/cdk": "22.2.3",
     "@angular/common": "^22.2.0",
     "@angular/compiler": "^22.2.0",
     "@angular/core": "^22.2.0",
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
+    "@tabler/icons-angular": "^3.49.0",
+    "echarts": "^6.1.0",
     "rxjs": "~7.8.0",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.0",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@angular-eslint/builder": "22.6.0",
     "@angular/build": "^22.2.2",
     "@angular/cli": "^22.2.2",
     "@angular/compiler-cli": "^22.2.0",
+    "@eslint/js": "^10.0.1",
     "@tailwindcss/postcss": "^4.1.12",
+    "@testing-library/angular": "^19.5.0",
+    "@testing-library/dom": "^10.4.2",
+    "angular-eslint": "22.6.0",
+    "eslint": "^10.12.0",
+    "eslint-import-resolver-typescript": "^4.4.5",
+    "eslint-plugin-boundaries": "^7.2.0",
     "jsdom": "^30.0.0",
+    "json-server": "0.17.4",
     "postcss": "^8.5.3",
     "prettier": "^3.8.1",
     "tailwindcss": "^4.1.12",
     "typescript": "~6.0.2",
+    "typescript-eslint": "8.71.0",
     "vitest": "^5.0.0"
   }
 }
