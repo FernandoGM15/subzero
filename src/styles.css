@@ -1,3 +1,55 @@
-/* You can add global styles to this file, and also import other style files */
-
 @import 'tailwindcss';
+
+/*
+ * Tokens semánticos de SubZero (Tailwind v4).
+ *
+ * Patrón: variables CSS "base" en `:root` (runtime) + `@theme inline`, que las
+ * expone como utilidades Tailwind que *referencian* la variable (no la copian).
+ * Así, cambiar un tema = sobreescribir variables, sin tocar componentes.
+ *
+ * Alcance actual: solo tema claro.
+ *   Fase 2 (dark): añadir `[data-theme='dark'] { ... }` + `@custom-variant dark`.
+ *   Fase 3 (paletas): añadir `[data-palette='x'] { --primary: ...; }`.
+ */
+:root {
+  /* Superficies y texto */
+  --surface: oklch(1 0 0); /* white */
+  --surface-muted: oklch(0.968 0.007 247.896); /* slate-100 */
+  --foreground: oklch(0.208 0.042 265.755); /* slate-900 */
+  --muted-foreground: oklch(0.554 0.046 257.417); /* slate-500 */
+  --border: oklch(0.869 0.022 252.894); /* slate-300 */
+
+  /* Acción principal */
+  --primary: oklch(0.208 0.042 265.755); /* slate-900 */
+  --primary-hover: oklch(0.372 0.044 257.287); /* slate-700 */
+  --primary-foreground: oklch(1 0 0);
+
+  /* Peligro */
+  --danger: oklch(0.577 0.245 27.325); /* red-600 */
+  --danger-hover: oklch(0.637 0.237 25.331); /* red-500 */
+  --danger-foreground: oklch(1 0 0);
+
+  /* Foco */
+  --ring: oklch(0.208 0.042 265.755); /* slate-900 */
+}
+
+/* Expone las variables como utilidades: bg-primary, text-foreground, ring-border, … */
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-danger: var(--danger);
+  --color-danger-hover: var(--danger-hover);
+  --color-danger-foreground: var(--danger-foreground);
+  --color-ring: var(--ring);
+}
+
+/* Tokens sin runtime: se definen directo (generan la utilidad `rounded-control`). */
+@theme {
+  --radius-control: 0.5rem;
+}
