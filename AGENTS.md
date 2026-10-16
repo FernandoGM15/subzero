@@ -312,6 +312,15 @@ export const SPINNER_SIZE: Record<ControlSize, string>; // tamaño del GLIFO (no
 - Las clases se guardan como strings **literales y completos** (`[&_svg]:size-4`), nunca concatenados en runtime: Tailwind v4 las escanea del fuente y solo así genera las utilidades.
 - **Colores y radius NO viven aquí** → son tokens CSS en `src/styles.css` (`@theme inline`), porque sí cambian en runtime (theming).
 
+### Ancho compartido de campos
+
+- Input, MoneyInput, Select, Autocomplete y DatePicker usan `FIELD_HOST_CLASSES` de `shared/ui/sizing.ts`.
+- El ancho lo determina el layout: `w-full min-w-0 max-w-full`, sin mínimos rígidos por componente.
+- `field-grid` en `src/styles.css` centraliza las columnas adaptables y el mínimo legible
+  `--spacing-field-min: 12rem`, que puede reducirse al ancho disponible en contenedores pequeños.
+- No mezclar el ancho de columnas con la escala `ControlSize`, ni aplicar esta política a Button/Spinner.
+- Select conserva `width` como excepción explícita; el default compartido es `100%`.
+
 ## 📦 Tipos compartidos de opciones (`shared/ui/option.ts`)
 
 La forma común de una opción vive en un módulo del UI kit, no dentro del componente Select:

@@ -11,7 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { CONTROL, type ControlSize } from '../sizing';
+import { CONTROL, FIELD_HOST_CLASSES, type ControlSize } from '../sizing';
 import { FieldContainer } from '../field-container';
 
 let nextInputId = 0;
@@ -19,7 +19,7 @@ let nextInputId = 0;
 @Component({
   selector: 'app-money-input',
   imports: [FieldContainer],
-  host: { class: 'block' },
+  host: { class: FIELD_HOST_CLASSES },
   template: `
     <app-field-container
       #field

@@ -52,4 +52,11 @@
 /* Tokens sin runtime: se definen directo (generan la utilidad `rounded-control`). */
 @theme {
   --radius-control: 0.5rem;
+  --spacing-field-min: 12rem;
+}
+
+/* The layout owns the shared readable minimum; fields may still fit smaller viewports. */
+@utility field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, var(--spacing-field-min)), 1fr));
 }

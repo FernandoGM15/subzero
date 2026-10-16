@@ -60,6 +60,33 @@ Para elegir el componente:
   el consumidor aporta el **nombre accesible**.
 - **Dependencias**: no se añade ninguna sin justificar por qué no basta una primitiva nativa.
 
+### Ancho de campos y layout
+
+Input, MoneyInput, Select, Autocomplete y DatePicker comparten `FIELD_HOST_CLASSES` desde
+`shared/ui/sizing.ts`: `block w-full min-w-0 max-w-full`. Los campos ocupan el ancho del contenedor;
+no imponen un ancho base ni un mínimo propio. `size` sigue controlando alto, padding y tipografía,
+no el número de columnas. Button y Spinner conservan su dimensionado independiente.
+
+Usar la utilidad compartida `field-grid` para filas de campos de igual ancho:
+
+```html
+<div class="field-grid gap-2">
+  <app-input label="Name" />
+  <app-money-input label="Amount" />
+  <app-date-picker label="Start date" />
+</div>
+```
+
+`field-grid` usa columnas `auto-fit` con mínimo legible centralizado en `--spacing-field-min`
+(`12rem`, definido en `src/styles.css`) y máximo `1fr`. Si el contenedor es menor que el mínimo,
+la columna puede ocupar su 100% sin forzar desbordamiento. El layout decide cuántas columnas caben;
+no es necesario definir un ancho individual. Una cuadrícula con un único campo ocupa toda su fila.
+Los labels e iconos muy largos siguen requiriendo revisión visual en su contexto.
+
+Select conserva su input `width` para excepciones explícitas; su default pasa a `100%`. Las otras
+instancias siguen la anchura de su contenedor. No usar un mínimo rígido en cada componente para
+compensar un layout sin definir: usar `field-grid` o una cuadrícula propia del consumidor.
+
 ### Envolturas presentacionales: `Container`
 
 El sufijo `Container` identifica una envoltura reutilizable de presentación, no un componente
@@ -423,7 +450,7 @@ compatibility. Its default type allows `value: null` for an explicit no-selectio
 | `label`                | `string`                      | requerido   | Label visible flotante asociado.                            |
 | `options`              | `readonly SelectOption[]`     | `[]`        | Valores únicos; consumidor prepara los registros.           |
 | `value`                | `SelectValue \| null` (model) | `null`      | Valor primitivo; conserva string/number sin normalizar.     |
-| `width`                | `string`                      | `'180px'`   | Ancho base CSS; admite ajuste por instancia y máximo 100%.  |
+| `width`                | `string`                      | `'100%'`    | Ancho base CSS; admite ajuste por instancia y máximo 100%.  |
 | `size`                 | `ControlSize`                 | `'md'`      | Escala compartida xs/sm/md/lg.                              |
 | `helperText`, `error`  | `string \| undefined`         | `undefined` | Visibilidad controlada externamente; error reemplaza ayuda. |
 | `reserveMessageSpace`  | `boolean`                     | `true`      | Reserva una línea de mensaje.                               |
@@ -447,7 +474,7 @@ incluida la regla readonly de Signal Forms: usar `disabled` cuando deba impedirs
   Una capa de dimensionado invisible conserva el ancho intrínseco del catálogo al cambiar la selección.
 - El panel usa superficie, borde, radius y colores semánticos. Alineación al ancho del trigger,
   posición inferior con alternativa superior, separación de 4 px y scroll vertical acotado.
-- El control parte de 180 px de ancho y se limita al 100% del contenedor; usa `width` para ajustarlo
+- El control ocupa el 100% del contenedor por defecto; usa `width` para ajustarlo
   por instancia, por ejemplo `[width]="'240px'"`.
 - El cursor es `pointer` en todo el control, incluida la label; cuando está deshabilitado cambia a
   `not-allowed`.
@@ -781,9 +808,9 @@ visual y con lector de pantalla sigue pendiente; no está cubierta por las prueb
 
 ### Variantes / Tamaños / Estados
 
-El disparador tiene un ancho base de `12rem`, limitado al ancho del contenedor, y no se comprime
-en filas flex. El icono conserva su ancho y el label no se divide en líneas. En filas de varios
-controles, el consumidor debe permitir salto de línea o utilizar una cuadrícula adaptable.
+El disparador llena su contenedor con la política compartida de ancho de campos. El icono conserva
+su ancho y el label no se divide en líneas. Usar `field-grid` o un layout propio para proporcionar
+columnas legibles y adaptables, sin anchos específicos del DatePicker.
 
 Los días y las flechas de navegación habilitados usan cursor pointer y hover con tokens semánticos
 existentes (`surface-muted`; `primary-hover` para el día seleccionado). Los controles deshabilitados

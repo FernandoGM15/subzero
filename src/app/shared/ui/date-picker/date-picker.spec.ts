@@ -35,11 +35,11 @@ describe('DatePicker', () => {
     expect(trigger().getAttribute('aria-expanded')).toBe('false');
   });
 
-  it('reserves a readable width when empty and protects the calendar icon and label', async () => {
+  it('fills the container when empty and protects the calendar icon and label', async () => {
     const { fixture } = await render(DatePicker, { inputs: { label: 'Payment date' } });
     const host = fixture.nativeElement as HTMLElement;
-    expect(host.classList.contains('w-48')).toBe(true);
-    expect(host.classList.contains('shrink-0')).toBe(true);
+    expect(host.classList.contains('w-full')).toBe(true);
+    expect(host.classList.contains('min-w-0')).toBe(true);
     expect(host.classList.contains('max-w-full')).toBe(true);
     const icon = trigger().querySelector('tabler-icon')!;
     expect(icon.classList.contains('shrink-0')).toBe(true);

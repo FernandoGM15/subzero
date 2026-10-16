@@ -29,7 +29,7 @@ import { DatePicker } from './shared/ui/date-picker';
       </div>
 
       <span class="text-xl mb-2 mt-2">Inputs</span>
-      <div class="flex flex-wrap gap-2">
+      <div class="field-grid gap-2">
         <app-input label="Text" type="text" placeholder="input a text here..." clearable />
         <app-input label="Password" type="password" />
         <app-input label="Email" type="email" />
@@ -39,12 +39,12 @@ import { DatePicker } from './shared/ui/date-picker';
       </div>
 
       <span class="text-xl mb-2 mt-2">Select</span>
-      <div class="flex gap-2">
+      <div class="field-grid gap-2">
         <app-select label="Select" [options]="selectItems()" />
       </div>
 
       <span class="text-xl mb-2 mt-2">Autocomplete</span>
-      <div class="flex gap-2">
+      <div class="field-grid gap-2">
         <app-autocomplete label="Select a company" [autocompleteFn]="autocompleteFn" clearable />
       </div>
     </div>

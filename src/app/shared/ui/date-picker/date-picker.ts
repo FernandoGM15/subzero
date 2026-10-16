@@ -23,7 +23,7 @@ import {
   TablerIconComponent,
 } from '@tabler/icons-angular';
 import { FieldContainer } from '../field-container';
-import { CONTROL, type ControlSize } from '../sizing';
+import { CONTROL, FIELD_HOST_CLASSES, type ControlSize } from '../sizing';
 import { addDays, addMonths, calendarDate, today, validDate } from './calendar';
 
 import {
@@ -44,7 +44,7 @@ let nextId = 0;
     CdkTrapFocus,
     TablerIconComponent,
   ],
-  host: { class: 'block min-w-0 w-48 max-w-full shrink-0' },
+  host: { class: FIELD_HOST_CLASSES },
   template: `
     <app-field-container
       #field

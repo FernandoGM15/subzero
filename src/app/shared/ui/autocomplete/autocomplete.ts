@@ -23,7 +23,7 @@ import { CdkConnectedOverlay, type ConnectedPosition } from '@angular/cdk/overla
 import { defer, finalize, type Observable, Subscription, take, timer } from 'rxjs';
 import { FieldContainer } from '../field-container';
 import type { SelectOption, SelectValue } from '../option';
-import { CONTROL, type ControlSize } from '../sizing';
+import { CONTROL, FIELD_HOST_CLASSES, type ControlSize } from '../sizing';
 
 export type AutocompleteOption = SelectOption<SelectValue>;
 
@@ -58,7 +58,7 @@ function optionToken(value: SelectValue): string {
     AriaOption,
     CdkConnectedOverlay,
   ],
-  host: { class: 'block min-w-0' },
+  host: { class: FIELD_HOST_CLASSES },
   template: `
     <app-field-container
       #field

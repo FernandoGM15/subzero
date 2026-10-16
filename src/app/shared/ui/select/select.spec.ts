@@ -236,12 +236,12 @@ describe('Select custom panel', () => {
       expect(control().parentElement?.className).toContain('focus-within:border-ring');
     },
   );
-  it('uses a responsive 180px base width that consumers can override', async () => {
+  it('fills the container by default and preserves explicit width overrides', async () => {
     const { fixture } = await render(Select, {
       inputs: { label: 'Cycle' },
     });
     const selectHost = fixture.debugElement.nativeElement as HTMLElement;
-    expect(selectHost.style.width).toBe('180px');
+    expect(selectHost.style.width).toBe('100%');
     expect(selectHost.style.maxWidth).toBe('100%');
     fixture.componentRef.setInput('width', '260px');
     fixture.detectChanges();

@@ -19,7 +19,7 @@ import { Listbox, Option as AriaOption } from '@angular/aria/listbox';
 import { CdkConnectedOverlay, type ConnectedPosition } from '@angular/cdk/overlay';
 import { FieldContainer } from '../field-container';
 import type { SelectOption, SelectValue } from '../option';
-import { CONTROL, type ControlSize } from '../sizing';
+import { CONTROL, FIELD_HOST_CLASSES, type ControlSize } from '../sizing';
 
 export type { SelectOption, SelectValue } from '../option';
 
@@ -38,7 +38,7 @@ let nextSelectId = 0;
     CdkConnectedOverlay,
   ],
   host: {
-    class: 'block min-w-0 cursor-pointer',
+    class: FIELD_HOST_CLASSES + ' cursor-pointer',
     '[style.width]': 'width()',
     '[style.max-width]': "'100%'",
   },
@@ -157,7 +157,7 @@ export class Select implements FormValueControl<SelectValue | null> {
   readonly label = input.required<string>();
   readonly options = input<readonly SelectOption[]>([]);
   readonly value = model<SelectValue | null>(null);
-  readonly width = input('180px');
+  readonly width = input('100%');
   readonly size = input<ControlSize>('md');
   readonly helperText = input<string>();
   readonly error = input<string>();

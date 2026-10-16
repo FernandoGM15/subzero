@@ -13,6 +13,9 @@
 /** Pasos de la escala. La comparten todos los controles (button, input, select, badge…). */
 export type ControlSize = 'xs' | 'sm' | 'md' | 'lg';
 
+/** Field width belongs to the containing layout, independently of control height. */
+export const FIELD_HOST_CLASSES = 'block w-full min-w-0 max-w-full';
+
 /** Dimensiones de un control para un tamaño dado. */
 export interface ControlSizeTokens {
   /** Alto de la caja del control. */

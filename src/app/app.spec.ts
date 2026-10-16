@@ -16,6 +16,23 @@ describe('App', () => {
     expect(app).toBeTruthy();
   });
 
+  it('places all showcase fields in shared responsive grids', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    for (const selector of [
+      'app-input',
+      'app-money-input',
+      'app-date-picker',
+      'app-select',
+      'app-autocomplete',
+    ]) {
+      expect(
+        compiled.querySelector(selector)?.parentElement?.classList.contains('field-grid'),
+      ).toBe(true);
+    }
+  });
+
   it('should render the UI kit showcase', async () => {
     const fixture = TestBed.createComponent(App);
     await fixture.whenStable();
