@@ -646,18 +646,138 @@ No hay entrada de texto editable. Sustituye al DateInput nativo provisional.
 
 ### API (`app-date-picker`)
 
-| Input / model / output             | Tipo                  | Default        | Descripción                                                                   |
-| ---------------------------------- | --------------------- | -------------- | ----------------------------------------------------------------------------- |
-| `label`                            | `string`              | Obligatorio    | Label visible y nombre del calendario.                                        |
-| `value`                            | `string` model        | `''`           | Fecha ISO `YYYY-MM-DD`; vacío como cadena vacía.                              |
-| `displayFormat`                    | `DateDisplayFormat`   | `'dd/MM/yyyy'` | `'dd/MM/yyyy'`, `'MM/dd/yyyy'` o `'yyyy-MM-dd'`. Solo afecta la presentación. |
-| `locale`                           | `string`              | `'en-US'`      | Configuración regional para nombres de días y meses.                          |
-| `min`, `max`                       | `string \| undefined` | `undefined`    | Límites ISO inclusivos de selección.                                          |
-| `size`                             | `ControlSize`         | `'md'`         | Dimensiones compartidas del disparador.                                       |
-| `helperText`, `error`              | `string \| undefined` | `undefined`    | Mensajes controlados por el consumidor.                                       |
-| `disabled`, `readonly`, `required` | `boolean`             | `false`        | Estados del control. Readonly conserva el foco, pero impide abrir.            |
-| `reserveMessageSpace`              | `boolean`             | `true`         | Reserva de altura para mensajes.                                              |
-| `touch`                            | output `void`         | —              | Al salir del control o cerrar el panel.                                       |
+| Input / model / output             | Tipo                          | Default                 | Descripción                                                                   |
+| ---------------------------------- | ----------------------------- | ----------------------- | ----------------------------------------------------------------------------- |
+| `label`                            | `string`                      | Obligatorio             | Label visible y nombre del calendario.                                        |
+| `value`                            | `string` model                | `''`                    | Fecha ISO `YYYY-MM-DD`; vacío como cadena vacía.                              |
+| `displayFormat`                    | `DateDisplayFormat`           | Global o `'dd/MM/yyyy'` | `'dd/MM/yyyy'`, `'MM/dd/yyyy'` o `'yyyy-MM-dd'`. Solo afecta la presentación. |
+| `locale`                           | `string`                      | `LOCALE_ID`             | Configuración regional para nombres de días y meses.                          |
+| `min`, `max`                       | `string \| undefined`         | `undefined`             | Límites ISO inclusivos de selección.                                          |
+| `size`                             | `ControlSize`                 | `'md'`                  | Dimensiones compartidas del disparador.                                       |
+| `helperText`, `error`              | `string \| undefined`         | `undefined`             | Mensajes controlados por el consumidor.                                       |
+| `disabled`, `readonly`, `required` | `boolean`                     | `false`                 | Estados del control. Readonly conserva el foco, pero impide abrir.            |
+| `reserveMessageSpace`              | `boolean`                     | `true`                  | Reserva de altura para mensajes.                                              |
+| `messages`                         | `Partial<DatePickerMessages>` | `{}`                    | Overrides de traducciones por instancia.                                      |
+| `touch`                            | output `void`                 | —                       | Al salir del control o cerrar el panel.                                       |
+
+### Configuración global y traducciones
+
+**Configurar una vez en `app.config.ts`; las instancias heredan los valores.** La configuración
+actual de SubZero usa `es-MX` y `dd/MM/yyyy`, sin añadir atributos regionales en cada DatePicker.
+
+#### Configuración de la aplicación
+
+```ts
+// src/app/app.config.ts
+import { registerLocaleData } from '@angular/common';
+import localeEsMx from '@angular/common/locales/es-MX';
+import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners } from '@angular/core';
+import { provideRouter } from '@angular/router';
+import { routes } from './app.routes';
+import { provideDatePickerDefaults } from './shared/ui/date-picker';
+
+registerLocaleData(localeEsMx);
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideBrowserGlobalErrorListeners(),
+    provideRouter(routes),
+    { provide: LOCALE_ID, useValue: 'es-MX' },
+    provideDatePickerDefaults({ displayFormat: 'dd/MM/yyyy' }),
+  ],
+};
+```
+
+`registerLocaleData` registra los datos para los pipes regionales de Angular. DatePicker obtiene
+el locale mediante inyección y usa `Intl` para nombres de meses, días y fechas accesibles.
+`LOCALE_ID` no traduce por sí solo textos de la interfaz.
+
+Con la configuración anterior, el consumidor solo aporta su label y modelo:
+
+```ts
+readonly paymentDate = signal('2026-10-16');
+```
+
+```html
+<app-date-picker label="Payment date" [(value)]="paymentDate" />
+```
+
+El campo muestra `16/10/2026`; el modelo conserva `2026-10-16`. Las flechas usan «Mes anterior» y
+«Mes siguiente» y las instrucciones accesibles se muestran en español. `label` sigue siendo el
+texto del consumidor: el componente no traduce «Payment date» automáticamente.
+
+#### Excepciones por instancia
+
+Una instancia puede usar otro locale o formato sin cambiar las demás:
+
+```html
+<app-date-picker
+  label="Payment date"
+  [(value)]="paymentDate"
+  locale="en-US"
+  displayFormat="MM/dd/yyyy"
+/>
+```
+
+Muestra `10/16/2026` y usa textos incorporados en inglés; el modelo sigue siendo `2026-10-16`.
+Formatos admitidos: `dd/MM/yyyy`, `MM/dd/yyyy` y `yyyy-MM-dd`; no se admiten patrones arbitrarios.
+
+#### Otros idiomas y textos personalizados
+
+Los textos incorporados cubren español (`es`, `es-MX`, `es-ES`…) e inglés. Otros locales siguen
+usando `Intl` para fechas, pero los textos de navegación e instrucciones tienen fallback inglés.
+Para traducirlos, aportar `messages` sin modificar el componente:
+
+```ts
+import { LOCALE_ID } from '@angular/core';
+import { provideDatePickerDefaults, type DatePickerMessages } from './shared/ui/date-picker';
+
+const frenchMessages: DatePickerMessages = {
+  previousMonth: 'Mois précédent',
+  nextMonth: 'Mois suivant',
+  keyboardHelp:
+    'Utilisez les flèches pour parcourir les dates et Entrée pour sélectionner. Échap ferme le calendrier.',
+};
+
+// Entries to add to appConfig.providers, preserving the other application providers.
+const dateProviders = [
+  { provide: LOCALE_ID, useValue: 'fr-FR' },
+  provideDatePickerDefaults({ displayFormat: 'dd/MM/yyyy', messages: frenchMessages }),
+];
+```
+
+Si la aplicación también usa pipes de Angular en francés, registrar sus datos regionales como en
+el ejemplo de español. Para una excepción puntual, `[messages]="customMessages"` admite
+`Partial<DatePickerMessages>`. Las claves omitidas conservan el texto del nivel anterior.
+
+| Configuración | Precedencia, de menor a mayor                                            |
+| ------------- | ------------------------------------------------------------------------ |
+| Locale        | `LOCALE_ID` → input `locale`                                             |
+| Formato       | `dd/MM/yyyy` → defaults globales → input `displayFormat`                 |
+| Textos        | Diccionario del locale efectivo → `messages` globales → input `messages` |
+
+Los textos globales explícitos también se aplican a instancias con otro locale. Si una excepción
+necesita otros textos, sobrescribir sus claves mediante el input `messages`.
+
+#### Alcance y archivos de referencia
+
+- `label`, `helperText` y `error` pertenecen al consumidor; no se traducen automáticamente.
+- El modelo y los límites `min`/`max` siempre son ISO; vacío se representa con `''`.
+- El locale no altera el inicio de semana: el calendario mantiene domingo a sábado.
+- La configuración global fija defaults iniciales; no hay selector global reactivo de idioma ni
+  persistencia de preferencias. Los inputs locales siguen pudiendo actualizarse mediante bindings.
+- Este mecanismo configura DatePicker, no traduce automáticamente el resto del UI kit.
+
+| Archivo                                                                         | Responsabilidad                                       |
+| ------------------------------------------------------------------------------- | ----------------------------------------------------- |
+| [app.config.ts](../src/app/app.config.ts)                                       | Locale y defaults de la aplicación.                   |
+| [date-picker.config.ts](../src/app/shared/ui/date-picker/date-picker.config.ts) | Token, provider, tipos y diccionarios.                |
+| [date-picker.ts](../src/app/shared/ui/date-picker/date-picker.ts)               | Consumo de defaults y resolución de textos.           |
+| [app.config.spec.ts](../src/app/app.config.spec.ts)                             | Prueba de la configuración real de la aplicación.     |
+| [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)     | Herencia, excepciones, traducciones y comportamiento. |
+
+Las pruebas automatizadas verifican herencia global, overrides y fallback de textos. La validación
+visual y con lector de pantalla sigue pendiente; no está cubierta por las pruebas de jsdom.
 
 ### Variantes / Tamaños / Estados
 

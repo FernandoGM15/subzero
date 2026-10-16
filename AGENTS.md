@@ -333,6 +333,18 @@ export interface SelectOption<TValue extends SelectValue | null = SelectValue | 
 
 ---
 
+## 🌐 Configuración regional de fechas
+
+- `app.config.ts` configura `LOCALE_ID` (`es-MX`) y registra los datos regionales de Angular.
+- DatePicker hereda ese locale y los valores de `provideDatePickerDefaults`; no repetirlos en cada instancia.
+- Los inputs `locale`, `displayFormat` y `messages` permiten excepciones locales. La configuración
+  global fija defaults iniciales, no implementa cambio global reactivo de idioma.
+- Los nombres de fechas usan `Intl`; los textos accesibles del DatePicker tienen español/inglés y
+  overrides parciales por configuración o instancia. Otros idiomas usan fallback inglés para textos.
+- El modelo permanece ISO `YYYY-MM-DD`; labels, ayuda y errores del consumidor no se traducen automáticamente.
+
+---
+
 ## 🚫 Qué NO Hacer
 
 - ❌ Importar de `features/*/data-access` o `features/*/ui` desde otro feature

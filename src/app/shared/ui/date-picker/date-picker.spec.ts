@@ -1,7 +1,8 @@
-import { Component, signal } from '@angular/core';
+import { Component, LOCALE_ID, signal } from '@angular/core';
 import { form, FormField } from '@angular/forms/signals';
 import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { DatePicker, type DateDisplayFormat } from './date-picker';
+import { provideDatePickerDefaults } from './date-picker.config';
 
 @Component({
   imports: [DatePicker, FormField],
@@ -62,6 +63,63 @@ describe('DatePicker', () => {
       expect(fixture.componentInstance.value()).toBe('2026-10-16');
     },
   );
+
+  it('inherits app locale, global format and Spanish accessible messages', async () => {
+    const { fixture } = await render(DatePicker, {
+      inputs: { label: 'Payment date', value: '2026-10-16' },
+      providers: [
+        { provide: LOCALE_ID, useValue: 'es-MX' },
+        provideDatePickerDefaults({ displayFormat: 'yyyy-MM-dd' }),
+      ],
+    });
+    expect(trigger().textContent).toContain('2026-10-16');
+    await open();
+    expect(screen.getByRole('grid').getAttribute('aria-label')).toMatch(/octubre/i);
+    expect(screen.getByRole('button', { name: 'Mes anterior' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Mes siguiente' })).toBeTruthy();
+    expect(screen.getByText(/Usa las flechas/)).toBeTruthy();
+    expect(day('2026-10-16').getAttribute('aria-label')).toMatch(/viernes/i);
+    expect(fixture.componentInstance.value()).toBe('2026-10-16');
+  });
+
+  it('allows per-instance locale, format and message overrides over global defaults', async () => {
+    const { fixture } = await render(DatePicker, {
+      inputs: {
+        label: 'Payment date',
+        value: '2026-10-16',
+        locale: 'en-US',
+        displayFormat: 'MM/dd/yyyy',
+        messages: { nextMonth: 'Next billing month' },
+      },
+      providers: [
+        { provide: LOCALE_ID, useValue: 'es-MX' },
+        provideDatePickerDefaults({ displayFormat: 'yyyy-MM-dd' }),
+      ],
+    });
+    expect(trigger().textContent).toContain('10/16/2026');
+    await open();
+    expect(screen.getByRole('grid').getAttribute('aria-label')).toBe('October 2026');
+    expect(screen.getByRole('button', { name: 'Previous month' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Next billing month' })).toBeTruthy();
+    expect(fixture.componentInstance.value()).toBe('2026-10-16');
+  });
+
+  it('supports app-owned translations for another language with English fallback', async () => {
+    await render(DatePicker, {
+      inputs: { label: 'Payment date', value: '2026-10-16' },
+      providers: [
+        { provide: LOCALE_ID, useValue: 'fr-FR' },
+        provideDatePickerDefaults({
+          messages: { previousMonth: 'Mois précédent', nextMonth: 'Mois suivant' },
+        }),
+      ],
+    });
+    await open();
+    expect(screen.getByRole('grid').getAttribute('aria-label')).toMatch(/octobre/);
+    expect(screen.getByRole('button', { name: 'Mois précédent' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Mois suivant' })).toBeTruthy();
+    expect(screen.getByText(/Use arrow keys/)).toBeTruthy();
+  });
 
   it('provides pointer and valid hover tokens only for enabled calendar actions', async () => {
     await render(DatePicker, {

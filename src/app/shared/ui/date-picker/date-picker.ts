@@ -6,6 +6,8 @@ import {
   computed,
   effect,
   input,
+  inject,
+  LOCALE_ID,
   model,
   output,
   signal,
@@ -24,7 +26,13 @@ import { FieldContainer } from '../field-container';
 import { CONTROL, type ControlSize } from '../sizing';
 import { addDays, addMonths, calendarDate, today, validDate } from './calendar';
 
-export type DateDisplayFormat = 'dd/MM/yyyy' | 'MM/dd/yyyy' | 'yyyy-MM-dd';
+import {
+  DATE_PICKER_DEFAULTS,
+  datePickerMessages,
+  type DateDisplayFormat,
+  type DatePickerMessages,
+} from './date-picker.config';
+export type { DateDisplayFormat } from './date-picker.config';
 let nextId = 0;
 
 @Component({
@@ -105,7 +113,7 @@ let nextId = 0;
         <div class="mb-3 flex items-center justify-between gap-2">
           <button
             type="button"
-            aria-label="Previous month"
+            [attr.aria-label]="translatedMessages().previousMonth"
             [disabled]="!canMoveMonth(-1)"
             class="rounded-control p-1 transition-colors enabled:cursor-pointer enabled:hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-40"
             (click)="moveMonth(-1)"
@@ -119,7 +127,7 @@ let nextId = 0;
           <h2 aria-live="polite" class="text-sm font-medium">{{ monthLabel() }}</h2>
           <button
             type="button"
-            aria-label="Next month"
+            [attr.aria-label]="translatedMessages().nextMonth"
             [disabled]="!canMoveMonth(1)"
             class="rounded-control p-1 transition-colors enabled:cursor-pointer enabled:hover:bg-surface-muted focus-visible:outline-2 focus-visible:outline-ring disabled:cursor-not-allowed disabled:opacity-40"
             (click)="moveMonth(1)"
@@ -178,18 +186,23 @@ let nextId = 0;
             }
           </tbody>
         </table>
-        <p class="sr-only">
-          Use arrow keys to navigate dates and Enter to select. Escape closes the calendar.
-        </p>
+        <p class="sr-only">{{ translatedMessages().keyboardHelp }}</p>
       </div>
     </ng-template>
   `,
 })
 export class DatePicker implements FormValueControl<string> {
+  private readonly defaults = inject(DATE_PICKER_DEFAULTS);
   readonly label = input.required<string>();
   readonly value = model('');
-  readonly displayFormat = input<DateDisplayFormat>('dd/MM/yyyy');
-  readonly locale = input('en-US');
+  readonly displayFormat = input<DateDisplayFormat>(this.defaults.displayFormat ?? 'dd/MM/yyyy');
+  readonly locale = input(inject(LOCALE_ID));
+  readonly messages = input<Partial<DatePickerMessages>>({});
+  protected readonly translatedMessages = computed(() => ({
+    ...datePickerMessages(this.locale()),
+    ...this.defaults.messages,
+    ...this.messages(),
+  }));
   readonly min = input<string>();
   readonly max = input<string>();
   readonly size = input<ControlSize>('md');

@@ -2,6 +2,12 @@
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 22.2.2.
 
+## Project documentation
+
+- [UI kit contracts](docs/ui-kit.md) — component APIs, accessibility and examples.
+- [DatePicker localization](docs/ui-kit.md#configuración-global-y-traducciones) — application defaults, per-instance overrides and custom translations.
+- [Architecture guidelines](AGENTS.md) — project boundaries and conventions.
+
 ## Development server
 
 To start a local development server, run:
