@@ -1,7 +1,6 @@
 import {
   Component,
   ElementRef,
-  afterRenderEffect,
   booleanAttribute,
   computed,
   input,
@@ -10,14 +9,13 @@ import {
   output,
   signal,
   viewChild,
-  viewChildren,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import { IconChevronDown, TablerIconComponent } from '@tabler/icons-angular';
-import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
-import { Listbox, Option as AriaOption } from '@angular/aria/listbox';
+import { Combobox, ComboboxPopup } from '@angular/aria/combobox';
 import { CdkConnectedOverlay, type ConnectedPosition } from '@angular/cdk/overlay';
 import { FieldContainer } from '../field-container';
+import { OptionPanel } from '../option-panel';
 import type { SelectOption, SelectValue } from '../option';
 import { CONTROL, FIELD_HOST_CLASSES, type ControlSize } from '../sizing';
 
@@ -32,10 +30,8 @@ let nextSelectId = 0;
     TablerIconComponent,
     Combobox,
     ComboboxPopup,
-    ComboboxWidget,
-    Listbox,
-    AriaOption,
     CdkConnectedOverlay,
+    OptionPanel,
   ],
   host: {
     class: FIELD_HOST_CLASSES + ' cursor-pointer',
@@ -115,39 +111,14 @@ let nextSelectId = 0;
       (detach)="close()"
     >
       <ng-template ngComboboxPopup [combobox]="combobox">
-        <div
-          #panel
-          #listbox="ngListbox"
-          ngListbox
-          ngComboboxWidget
-          [class]="panelClasses()"
-          [attr.aria-label]="label()"
-          focusMode="activedescendant"
-          selectionMode="explicit"
-          [softDisabled]="false"
-          [tabindex]="-1"
-          [value]="selectedTokens()"
-          [activeDescendant]="listbox.activeDescendant()"
-          (keydown)="onPanelKeydown($event)"
-          (mousedown)="$event.preventDefault()"
-          (focusout)="onBlur($event)"
-        >
-          @for (option of renderedOptions(); track option.token) {
-            <div
-              ngOption
-              [value]="option.token"
-              [label]="option.label"
-              [disabled]="option.disabled ?? false"
-              [class]="optionClasses()"
-              [class.opacity-50]="option.disabled"
-              (click)="commit(option.token)"
-              (keydown.enter)="$event.preventDefault(); commit(option.token)"
-              (keydown.space)="$event.preventDefault(); commit(option.token)"
-            >
-              {{ option.label }}
-            </div>
-          }
-        </div>
+        <app-option-panel
+          [options]="renderedOptions()"
+          [selectedTokens]="selectedTokens()"
+          [accessibleLabel]="label()"
+          [size]="size()"
+          (optionSelected)="commit($event)"
+          (panelBlur)="onBlur($event)"
+        />
       </ng-template>
     </ng-template>
   `,
@@ -204,32 +175,9 @@ export class Select implements FormValueControl<SelectValue | null> {
       tokens.icon,
     ].join(' ');
   });
-  protected readonly panelClasses = computed(() =>
-    [
-      'max-h-64 w-full overflow-y-auto rounded-control border border-border bg-surface p-1 text-foreground shadow-lg outline-none',
-      CONTROL[this.size()].text,
-    ].join(' '),
-  );
-  protected readonly optionClasses = computed(() =>
-    [
-      'flex cursor-pointer items-center rounded-control outline-none hover:bg-primary/10 data-[active=true]:bg-primary/10 aria-selected:bg-primary/10 aria-selected:text-primary aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent',
-      CONTROL[this.size()].height,
-      CONTROL[this.size()].paddingX,
-    ].join(' '),
-  );
   private readonly trigger = viewChild.required<ElementRef<HTMLButtonElement>>('nativeTrigger');
-  private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
-  private readonly listbox = viewChild(Listbox);
-  private readonly ariaOptions = viewChildren(AriaOption);
+  private readonly optionPanel = viewChild(OptionPanel);
 
-  constructor() {
-    afterRenderEffect(() => {
-      const active = this.listbox()?.activeDescendant();
-      if (!active) return;
-      const element = this.panel()?.nativeElement.querySelector<HTMLElement>(`[id="${active}"]`);
-      element?.scrollIntoView?.({ block: 'nearest' });
-    });
-  }
   focus(options?: FocusOptions): void {
     this.trigger().nativeElement.focus(options);
   }
@@ -242,20 +190,9 @@ export class Select implements FormValueControl<SelectValue | null> {
     this.value.set(option.value);
     this.close();
   }
-  protected onPanelKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    const active = this.ariaOptions().find((option) => option.active());
-    if (active) {
-      event.preventDefault();
-      this.commit(active.value());
-    }
-  }
   protected onBlur(event: FocusEvent): void {
     const next = event.relatedTarget as Node | null;
-    if (
-      next &&
-      (this.trigger().nativeElement.contains(next) || this.panel()?.nativeElement.contains(next))
-    )
+    if (next && (this.trigger().nativeElement.contains(next) || this.optionPanel()?.contains(next)))
       return;
     this.focused.set(false);
     this.close();

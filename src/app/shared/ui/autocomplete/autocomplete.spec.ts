@@ -77,6 +77,18 @@ function combobox(): HTMLInputElement {
 }
 
 describe('Autocomplete', () => {
+  it('distinguishes hover, keyboard-active, and selected option styling', async () => {
+    await render(FormHost);
+    fireEvent.input(combobox(), { target: { value: 'company' } });
+    const option = await screen.findByRole('option', { name: 'HEB' });
+
+    expect(option.className).toContain('hover:bg-primary/10');
+    expect(option.className).toContain('data-[active=true]:outline-1');
+    expect(option.className).toContain('data-[active=true]:outline-ring/40');
+    expect(option.className).not.toContain('data-[active=true]:bg-primary/10');
+    expect(option.className).toContain('aria-selected:bg-primary/10');
+  });
+
   it('does not render default guidance when opened before searching', async () => {
     const { fixture } = await render(FormHost);
     fireEvent.focus(combobox());
