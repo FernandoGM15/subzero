@@ -10,10 +10,10 @@ import { MoneyInput } from './shared/ui/money-input';
 import { DatePicker } from './shared/ui/date-picker';
 import { Card } from './shared/ui/card';
 import { Badge } from './shared/ui/badge';
+import { Skeleton } from './shared/ui/skeleton';
 
 @Component({
   imports: [
-    RouterOutlet,
     Button,
     Spinner,
     Input,
@@ -23,6 +23,7 @@ import { Badge } from './shared/ui/badge';
     DatePicker,
     Card,
     Badge,
+    Skeleton,
   ],
   selector: 'app-root',
   template: `
@@ -59,6 +60,13 @@ import { Badge } from './shared/ui/badge';
       <span class="text-xl mb-2 mt-2">Autocomplete</span>
       <div class="field-grid gap-2">
         <app-autocomplete label="Select a company" [autocompleteFn]="autocompleteFn" clearable />
+      </div>
+
+      <span class="text-xl mb-2 mt-2">Skeleton</span>
+      <div class="flex max-w-sm flex-col gap-2">
+        <app-skeleton class="h-6 w-1/2" />
+        <app-skeleton class="h-4 w-full" />
+        <app-skeleton class="h-4 w-3/4" />
       </div>
 
       <span class="text-xl mb-2 mt-2">Badge</span>

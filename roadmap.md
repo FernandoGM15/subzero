@@ -21,6 +21,7 @@ y búsqueda se mantienen; las demás piezas se desarrollarán cuando las necesit
 | Input          | `shared/ui/input/`           | Entrada de texto con label flotante.                                                                       |
 | Select         | `shared/ui/select/`          | Selección simple con panel propio (Aria/CDK); valores primitivos, Signal Forms y catálogos del consumidor. |
 | FieldContainer | `shared/ui/field-container/` | Presentación compartida de Input y Select por composición.                                                 |
+| Skeleton       | `shared/ui/skeleton/`        | Bloque decorativo para representar contenido en carga.                                                     |
 | Badge          | `shared/ui/badge/`           | Indicador visual genérico con intenciones semánticas.                                                      |
 | Card           | `shared/ui/card/`            | Contenedor visual genérico con contenido proyectado.                                                       |
 | Autocomplete   | `shared/ui/autocomplete/`    | Búsqueda y selección con carga incremental; opciones suministradas por el consumidor.                      |
@@ -44,7 +45,6 @@ cada componente, definir su contrato y accesibilidad en `docs/ui-kit.md`.
 | Table            | `shared/ui/table/`               | Columnas y filas genéricas con ordenamiento, sin conocer el modelo Subscription; RF-C1.                                                                                  |
 | Pagination       | `shared/ui/pagination/`          | Navegación de páginas y estado de página/tamaño suministrado por el consumidor; RF-C1.                                                                                   |
 | SegmentedControl | `shared/ui/segmented-control/`   | Elección genérica entre opciones excluyentes, inicialmente tabla/cards; RF-C3. Crear solo si aporta reutilización frente a componer Button.                              |
-| Skeleton         | `shared/ui/skeleton/`            | Placeholder visual de carga para bloques de contenido; NFR de estados de UI.                                                                                             |
 | EmptyState       | `shared/ui/empty-state/`         | Mensaje, contenido y acción para ausencia de datos, definidos por el consumidor; NFR de estados de UI.                                                                   |
 | Chart            | `shared/ui/chart/`               | Wrapper de ECharts: inicializar, actualizar y destruir la instancia. Datos y agrupaciones pertenecen al dashboard; RF-A4.                                                |
 | Toast            | `shared/ui/toast/`               | Presentación accesible de avisos temporales. Previsto en arquitectura; prioridad y mecanismo de coordinación pendientes.                                                 |

@@ -16,6 +16,7 @@ Contrato de los componentes de `src/app/shared/ui`.
 
 | Componente                        | Selector              | Estado               | Pruebas                                                                                 |
 | --------------------------------- | --------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| [Skeleton](#skeleton)             | `app-skeleton`        | Implementado         | [skeleton.spec.ts](../src/app/shared/ui/skeleton/skeleton.spec.ts)                      |
 | [Badge](#badge)                   | `app-badge`           | Implementado         | [badge.spec.ts](../src/app/shared/ui/badge/badge.spec.ts)                               |
 | [Card](#card)                     | `app-card`            | Implementado         | [card.spec.ts](../src/app/shared/ui/card/card.spec.ts)                                  |
 | [Button](#button)                 | `app-button`          | Implementado         | [button.spec.ts](../src/app/shared/ui/button/button.spec.ts)                            |
@@ -24,6 +25,17 @@ Contrato de los componentes de `src/app/shared/ui`.
 | [Select](#select)                 | `app-select`          | Implementado         | [select.spec.ts](../src/app/shared/ui/select/select.spec.ts)                            |
 | [FieldContainer](#fieldcontainer) | `app-field-container` | Interno implementado | [field-container.spec.ts](../src/app/shared/ui/field-container/field-container.spec.ts) |
 | [DatePicker](#datepicker)         | `app-date-picker`     | Implementado         | [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)             |
+
+## Skeleton
+
+Bloque decorativo que representa contenido mientras carga. Importar `Skeleton` desde
+`shared/ui/skeleton` y definir ancho y alto con clases en el componente. Respeta la preferencia de
+movimiento reducido. El consumidor comunica el estado de carga de forma accesible; Skeleton está
+oculto a tecnologías de asistencia y no anuncia cambios por sí mismo.
+
+```html
+<app-skeleton class="h-4 w-32" />
+```
 
 ## Badge
 
