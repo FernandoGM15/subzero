@@ -16,6 +16,7 @@ Contrato de los componentes de `src/app/shared/ui`.
 
 | Componente                        | Selector              | Estado               | Pruebas                                                                                 |
 | --------------------------------- | --------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| [Modal](#modal)                   | servicio              | Implementado         | [modal.spec.ts](../src/app/shared/ui/modal/modal.spec.ts)                               |
 | [EmptyState](#emptystate)         | `app-empty-state`     | Implementado         | [empty-state.spec.ts](../src/app/shared/ui/empty-state/empty-state.spec.ts)             |
 | [Skeleton](#skeleton)             | `app-skeleton`        | Implementado         | [skeleton.spec.ts](../src/app/shared/ui/skeleton/skeleton.spec.ts)                      |
 | [Badge](#badge)                   | `app-badge`           | Implementado         | [badge.spec.ts](../src/app/shared/ui/badge/badge.spec.ts)                               |
@@ -26,6 +27,39 @@ Contrato de los componentes de `src/app/shared/ui`.
 | [Select](#select)                 | `app-select`          | Implementado         | [select.spec.ts](../src/app/shared/ui/select/select.spec.ts)                            |
 | [FieldContainer](#fieldcontainer) | `app-field-container` | Interno implementado | [field-container.spec.ts](../src/app/shared/ui/field-container/field-container.spec.ts) |
 | [DatePicker](#datepicker)         | `app-date-picker`     | Implementado         | [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)             |
+
+## Modal
+
+`ModalService` abre diálogos mediante CDK Dialog. Todos requieren nombre accesible, conservan el
+foco dentro del diálogo y lo restauran al cerrar. Escape cierra; pulsar fuera no lo cierra.
+
+- `openMessage({ title, message, acceptLabel? })`: mensaje sin resultado.
+- `openConfirmation({ title, message, acceptLabel?, cancelLabel? })`: `true` al confirmar,
+  `false` al cancelar o pulsar Escape.
+- `openInput({ title, message, label, type, preload?, isOptional?, schema?, acceptLabel?, cancelLabel? })`:
+  recibe un valor textual, fecha ISO o importe en centavos; cancelar o Escape devuelve `undefined`.
+  El campo es obligatorio por defecto. Un valor opcional vacío omite las validaciones de formato;
+  los schemas Zod validan valores no vacíos.
+- `openModal<R, D, C>(component, { data, ariaLabel })`: componente personalizado, datos de entrada
+  y resultado tipados. El componente se cierra mediante el `DialogRef` de CDK inyectado.
+
+Cada método devuelve un `DialogRef`; `closed` emite el resultado cuando el diálogo se cierra.
+Los textos de las acciones pueden configurarse para adaptarse al contexto y al idioma.
+
+```ts
+const ref = this.modal.openInput({
+  title: 'Rename subscription',
+  message: 'Enter a new name.',
+  label: 'Name',
+  type: 'text',
+  preload: 'Streaming',
+});
+ref.closed.subscribe((value) => {
+  if (value !== undefined) {
+    // Handle the accepted value.
+  }
+});
+```
 
 ## EmptyState
 

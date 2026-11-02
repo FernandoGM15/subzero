@@ -1,5 +1,4 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
 import { Button } from './shared/ui/button';
 import { Spinner } from './shared/ui/spinner';
 import { Input } from './shared/ui/input';
@@ -12,6 +11,7 @@ import { Card } from './shared/ui/card';
 import { Badge } from './shared/ui/badge';
 import { Skeleton } from './shared/ui/skeleton';
 import { EmptyState } from './shared/ui/empty-state';
+import { ModalService } from './shared/ui/modal';
 
 @Component({
   imports: [
@@ -64,6 +64,13 @@ import { EmptyState } from './shared/ui/empty-state';
         <app-autocomplete label="Select a company" [autocompleteFn]="autocompleteFn" clearable />
       </div>
 
+      <span class="text-xl mb-2 mt-2">Modal</span>
+      <div class="flex flex-wrap gap-2">
+        <app-button (click)="showMessage()">Message</app-button>
+        <app-button (click)="showInput()">Input</app-button>
+        <app-button (click)="showConfirmation()">Confirmation</app-button>
+      </div>
+
       <span class="text-xl mb-2 mt-2">Empty state</span>
       <app-empty-state>
         <h2 class="text-lg font-semibold">No subscriptions yet</h2>
@@ -101,6 +108,16 @@ import { EmptyState } from './shared/ui/empty-state';
   `,
 })
 export class App {
+  private readonly modal = inject(ModalService);
+  showMessage() {
+    this.modal.openMessage({ title: 'Information', message: 'Your changes are ready.' });
+  }
+  showInput() {
+    this.modal.openInput({ title: 'Name', message: 'Enter a name.', label: 'Name', type: 'text' });
+  }
+  showConfirmation() {
+    this.modal.openConfirmation({ title: 'Confirmation', message: 'Do you want to continue?' });
+  }
   isLoading = signal(true);
   readonly autocompleteFn: AutocompleteFn = (search) => {
     console.log({ search });

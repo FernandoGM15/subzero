@@ -21,6 +21,7 @@ y búsqueda se mantienen; las demás piezas se desarrollarán cuando las necesit
 | Input          | `shared/ui/input/`           | Entrada de texto con label flotante.                                                                       |
 | Select         | `shared/ui/select/`          | Selección simple con panel propio (Aria/CDK); valores primitivos, Signal Forms y catálogos del consumidor. |
 | FieldContainer | `shared/ui/field-container/` | Presentación compartida de Input y Select por composición.                                                 |
+| Modal          | `shared/ui/modal/`           | Servicio de diálogos con variantes predefinidas y componentes personalizados.                              |
 | EmptyState     | `shared/ui/empty-state/`     | Presentación de ausencia de datos con contenido proyectado.                                                |
 | Skeleton       | `shared/ui/skeleton/`        | Bloque decorativo para representar contenido en carga.                                                     |
 | Badge          | `shared/ui/badge/`           | Indicador visual genérico con intenciones semánticas.                                                      |
@@ -42,7 +43,6 @@ cada componente, definir su contrato y accesibilidad en `docs/ui-kit.md`.
 | Componente       | Ubicación propuesta              | Necesidad / alcance                                                                                                                                                      |
 | ---------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Numeric Input    | `shared/ui/input/` (por evaluar) | Entrada numérica genérica, independiente de MoneyInput. Definir modelo `number` o `null`, conversión, valor vacío y atributos `min`, `max`, `step` antes de implementar. |
-| Dialog / Modal   | `shared/ui/modal/`               | Contenedor modal accesible para confirmaciones y, si se elige ese flujo, formularios; RF-B3. Un solo componente base, no dos implementaciones duplicadas.                |
 | Table            | `shared/ui/table/`               | Columnas y filas genéricas con ordenamiento, sin conocer el modelo Subscription; RF-C1.                                                                                  |
 | Pagination       | `shared/ui/pagination/`          | Navegación de páginas y estado de página/tamaño suministrado por el consumidor; RF-C1.                                                                                   |
 | SegmentedControl | `shared/ui/segmented-control/`   | Elección genérica entre opciones excluyentes, inicialmente tabla/cards; RF-C3. Crear solo si aporta reutilización frente a componer Button.                              |
