@@ -16,6 +16,7 @@ Contrato de los componentes de `src/app/shared/ui`.
 
 | Componente                        | Selector              | Estado               | Pruebas                                                                                 |
 | --------------------------------- | --------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| [EmptyState](#emptystate)         | `app-empty-state`     | Implementado         | [empty-state.spec.ts](../src/app/shared/ui/empty-state/empty-state.spec.ts)             |
 | [Skeleton](#skeleton)             | `app-skeleton`        | Implementado         | [skeleton.spec.ts](../src/app/shared/ui/skeleton/skeleton.spec.ts)                      |
 | [Badge](#badge)                   | `app-badge`           | Implementado         | [badge.spec.ts](../src/app/shared/ui/badge/badge.spec.ts)                               |
 | [Card](#card)                     | `app-card`            | Implementado         | [card.spec.ts](../src/app/shared/ui/card/card.spec.ts)                                  |
@@ -25,6 +26,19 @@ Contrato de los componentes de `src/app/shared/ui`.
 | [Select](#select)                 | `app-select`          | Implementado         | [select.spec.ts](../src/app/shared/ui/select/select.spec.ts)                            |
 | [FieldContainer](#fieldcontainer) | `app-field-container` | Interno implementado | [field-container.spec.ts](../src/app/shared/ui/field-container/field-container.spec.ts) |
 | [DatePicker](#datepicker)         | `app-date-picker`     | Implementado         | [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)             |
+
+## EmptyState
+
+Contenedor presentacional para comunicar ausencia de datos. Importar `EmptyState` desde
+`shared/ui/empty-state` y proyectar el contenido y las acciones que correspondan. El consumidor
+aporta la semántica y decide cuándo mostrarlo; no se añade un rol de anuncio automático.
+
+```html
+<app-empty-state>
+  <h2>No subscriptions</h2>
+  <p>Add a subscription to get started.</p>
+</app-empty-state>
+```
 
 ## Skeleton
 

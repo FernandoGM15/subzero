@@ -11,6 +11,7 @@ import { DatePicker } from './shared/ui/date-picker';
 import { Card } from './shared/ui/card';
 import { Badge } from './shared/ui/badge';
 import { Skeleton } from './shared/ui/skeleton';
+import { EmptyState } from './shared/ui/empty-state';
 
 @Component({
   imports: [
@@ -24,6 +25,7 @@ import { Skeleton } from './shared/ui/skeleton';
     Card,
     Badge,
     Skeleton,
+    EmptyState,
   ],
   selector: 'app-root',
   template: `
@@ -61,6 +63,13 @@ import { Skeleton } from './shared/ui/skeleton';
       <div class="field-grid gap-2">
         <app-autocomplete label="Select a company" [autocompleteFn]="autocompleteFn" clearable />
       </div>
+
+      <span class="text-xl mb-2 mt-2">Empty state</span>
+      <app-empty-state>
+        <h2 class="text-lg font-semibold">No subscriptions yet</h2>
+        <p class="text-muted-foreground">Add a subscription to get started.</p>
+        <app-button>Add subscription</app-button>
+      </app-empty-state>
 
       <span class="text-xl mb-2 mt-2">Skeleton</span>
       <div class="flex max-w-sm flex-col gap-2">
