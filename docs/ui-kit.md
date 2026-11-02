@@ -16,12 +16,37 @@ Contrato de los componentes de `src/app/shared/ui`.
 
 | Componente                        | Selector              | Estado               | Pruebas                                                                                 |
 | --------------------------------- | --------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| [Card](#card)                     | `app-card`            | Implementado         | [card.spec.ts](../src/app/shared/ui/card/card.spec.ts)                                  |
 | [Button](#button)                 | `app-button`          | Implementado         | [button.spec.ts](../src/app/shared/ui/button/button.spec.ts)                            |
 | [Spinner](#spinner)               | `app-spinner`         | Implementado         | [spinner.spec.ts](../src/app/shared/ui/spinner/spinner.spec.ts)                         |
 | [Input](#input)                   | `app-input`           | Implementado         | [input.spec.ts](../src/app/shared/ui/input/input.spec.ts)                               |
 | [Select](#select)                 | `app-select`          | Implementado         | [select.spec.ts](../src/app/shared/ui/select/select.spec.ts)                            |
 | [FieldContainer](#fieldcontainer) | `app-field-container` | Interno implementado | [field-container.spec.ts](../src/app/shared/ui/field-container/field-container.spec.ts) |
 | [DatePicker](#datepicker)         | `app-date-picker`     | Implementado         | [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)             |
+
+## Card
+
+Contenedor visual genérico sin lógica de negocio ni interacción propia. Importar `Card` desde
+`shared/ui/card` y usar `app-card`. El consumidor aporta el HTML semántico, las acciones y el
+texto alternativo de las imágenes; Card no añade roles ni nombres accesibles.
+
+Las secciones son opcionales y se muestran en este orden, independientemente del orden de entrada:
+
+- `cardImage`: imagen o contenido visual de ancho completo; el consumidor controla altura y recorte.
+- `cardTitle`: título con espaciado; usar el nivel de encabezado adecuado al contexto.
+- `cardContent`: cuerpo de la tarjeta. El contenido sin atributo también se proyecta en el cuerpo.
+- `cardFooter`: pie separado por una línea superior, para acciones o información secundaria.
+
+```html
+<app-card>
+  <img cardImage src="cover.jpg" alt="Service illustration" />
+  <h2 cardTitle>Subscription</h2>
+  <p cardContent>Details</p>
+  <footer cardFooter>Actions</footer>
+</app-card>
+```
+
+También se puede usar contenido libre sin secciones: `<app-card><p>Details</p></app-card>`.
 
 ## Uso rápido
 
