@@ -2,7 +2,6 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  afterRenderEffect,
   booleanAttribute,
   computed,
   effect,
@@ -12,16 +11,15 @@ import {
   output,
   signal,
   viewChild,
-  viewChildren,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import type { FormValueControl } from '@angular/forms/signals';
 import { IconX, TablerIconComponent } from '@tabler/icons-angular';
-import { Combobox, ComboboxPopup, ComboboxWidget } from '@angular/aria/combobox';
-import { Listbox, Option as AriaOption } from '@angular/aria/listbox';
+import { Combobox, ComboboxPopup } from '@angular/aria/combobox';
 import { CdkConnectedOverlay, type ConnectedPosition } from '@angular/cdk/overlay';
 import { defer, finalize, type Observable, Subscription, take, timer } from 'rxjs';
 import { FieldContainer } from '../field-container';
+import { OptionPanel } from '../option-panel';
 import type { SelectOption, SelectValue } from '../option';
 import { CONTROL, FIELD_HOST_CLASSES, type ControlSize } from '../sizing';
 
@@ -53,10 +51,8 @@ function optionToken(value: SelectValue): string {
     TablerIconComponent,
     Combobox,
     ComboboxPopup,
-    ComboboxWidget,
-    Listbox,
-    AriaOption,
     CdkConnectedOverlay,
+    OptionPanel,
   ],
   host: { class: FIELD_HOST_CLASSES },
   template: `
@@ -128,46 +124,16 @@ function optionToken(value: SelectValue): string {
       (detach)="close()"
     >
       <ng-template ngComboboxPopup [combobox]="combobox">
-        <div
-          #panel
-          [class]="panelClasses()"
-          [attr.aria-hidden]="panelPending() ? 'true' : null"
-          (focusout)="onBlur($event)"
-        >
-          <div
-            #listboxElement
-            #listbox="ngListbox"
-            ngListbox
-            ngComboboxWidget
-            [class]="listboxClasses()"
-            [attr.aria-label]="label() + ' options'"
-            focusMode="activedescendant"
-            selectionMode="explicit"
-            [softDisabled]="false"
-            [tabindex]="-1"
-            [value]="selectedTokens()"
-            [activeDescendant]="listbox.activeDescendant()"
-            (scroll)="onPanelScroll($event)"
-            (keydown)="onPanelKeydown($event)"
-            (mousedown)="$event.preventDefault()"
-          >
-            @for (option of renderedOptions(); track option.token) {
-              <div
-                ngOption
-                [value]="option.token"
-                [label]="option.label"
-                [disabled]="option.disabled ?? false"
-                [class]="optionClasses()"
-                [class.opacity-50]="option.disabled"
-                (click)="commit(option.token)"
-                (keydown.enter)="$event.preventDefault(); commit(option.token)"
-                (keydown.space)="$event.preventDefault(); commit(option.token)"
-              >
-                {{ option.label }}
-              </div>
-            }
-          </div>
-        </div>
+        <app-option-panel
+          [options]="renderedOptions()"
+          [selectedTokens]="selectedTokens()"
+          [accessibleLabel]="label() + ' options'"
+          [size]="size()"
+          [pending]="panelPending()"
+          (optionSelected)="commit($event)"
+          (panelScroll)="onPanelScroll($event)"
+          (panelBlur)="onBlur($event)"
+        />
       </ng-template>
     </ng-template>
   `,
@@ -205,11 +171,6 @@ export class Autocomplete implements FormValueControl<AutocompleteOption | null>
   protected readonly panelPending = computed(
     () => this.options().length === 0 && (this.loading() || this.loadError()),
   );
-  protected readonly panelClasses = computed(() =>
-    this.panelPending()
-      ? 'pointer-events-none invisible h-0 max-h-0 overflow-hidden border-0 p-0 shadow-none w-full'
-      : 'w-full rounded-control border border-border bg-surface p-1 text-foreground shadow-lg',
-  );
   protected readonly floating = computed(
     () => this.focused() || this.expanded() || this.value() !== null,
   );
@@ -237,26 +198,9 @@ export class Autocomplete implements FormValueControl<AutocompleteOption | null>
       tokens.text,
     ].join(' ');
   });
-  protected readonly listboxClasses = computed(() =>
-    [
-      'max-h-64 w-full overflow-y-auto text-foreground outline-none',
-      CONTROL[this.size()].text,
-    ].join(' '),
-  );
-  protected readonly optionClasses = computed(() =>
-    [
-      'flex cursor-pointer items-center rounded-control outline-none hover:bg-primary/10 data-[active=true]:bg-primary/10 aria-selected:bg-primary/10 aria-selected:text-primary aria-disabled:cursor-not-allowed aria-disabled:hover:bg-transparent',
-      CONTROL[this.size()].height,
-      CONTROL[this.size()].paddingX,
-    ].join(' '),
-  );
-
   private readonly destroyRef = inject(DestroyRef);
   private readonly trigger = viewChild.required<ElementRef<HTMLInputElement>>('nativeInput');
-  private readonly panel = viewChild<ElementRef<HTMLElement>>('panel');
-  private readonly listboxElement = viewChild<ElementRef<HTMLElement>>('listboxElement');
-  private readonly listbox = viewChild(Listbox);
-  private readonly ariaOptions = viewChildren(AriaOption);
+  private readonly optionPanel = viewChild(OptionPanel);
   private debounceSubscription?: Subscription;
   private pageSubscription?: Subscription;
   private requestVersion = 0;
@@ -267,18 +211,6 @@ export class Autocomplete implements FormValueControl<AutocompleteOption | null>
   constructor() {
     effect(() => {
       if (!this.focused()) this.query.set(this.value()?.label ?? '');
-    });
-
-    afterRenderEffect(() => {
-      this.options();
-      const listbox = this.listboxElement()?.nativeElement;
-      if (!listbox || !this.expanded()) return;
-      const active = this.listbox()?.activeDescendant();
-      if (active) {
-        listbox
-          .querySelector<HTMLElement>(`[id="${active}"]`)
-          ?.scrollIntoView?.({ block: 'nearest' });
-      }
     });
   }
 
@@ -318,15 +250,6 @@ export class Autocomplete implements FormValueControl<AutocompleteOption | null>
     }
   }
 
-  protected onPanelKeydown(event: KeyboardEvent): void {
-    if (event.key !== 'Enter' && event.key !== ' ') return;
-    const active = this.ariaOptions().find((option) => option.active());
-    if (active) {
-      event.preventDefault();
-      this.commit(active.value());
-    }
-  }
-
   protected close(): void {
     this.expanded.set(false);
   }
@@ -363,7 +286,7 @@ export class Autocomplete implements FormValueControl<AutocompleteOption | null>
     const next = event.relatedTarget as Node | null;
     if (
       next &&
-      (this.trigger().nativeElement.contains(next) || this.panel()?.nativeElement.contains(next))
+      (this.trigger().nativeElement.contains(next) || this.optionPanel()?.contains(next))
     ) {
       return;
     }

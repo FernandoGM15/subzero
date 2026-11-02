@@ -55,6 +55,15 @@ async function key(key: string) {
 }
 
 describe('Select custom panel', () => {
+  it('stretches the option panel to the connected trigger width', async () => {
+    await render(Select, { inputs: { label: 'Cycle', options: OPTIONS } });
+    await open();
+
+    const panelHost = document.querySelector('app-option-panel') as HTMLElement;
+    expect(panelHost.style.display).toBe('block');
+    expect(panelHost.style.width).toBe('100%');
+  });
+
   it('keeps the chevron closer to the trailing edge than the label padding', async () => {
     await render(Select, { inputs: { label: 'Cycle', options: OPTIONS } });
 
@@ -258,13 +267,15 @@ describe('Select custom panel', () => {
     expect(control().style.cursor).toBe('not-allowed');
     expect(screen.getByText('Cycle').className).toContain('cursor-not-allowed');
   });
-  it('uses a background highlight for both pointer hover and keyboard-active options', async () => {
+  it('distinguishes hover, keyboard-active, and selected option styling', async () => {
     await render(Select, { inputs: { label: 'Cycle', options: OPTIONS } });
     await open();
     const option = screen.getByRole('option', { name: 'Monthly' });
     expect(option.className).toContain('hover:bg-primary/10');
-    expect(option.className).toContain('data-[active=true]:bg-primary/10');
-    expect(option.className).not.toContain('data-[active=true]:ring-1');
+    expect(option.className).toContain('data-[active=true]:outline-1');
+    expect(option.className).toContain('data-[active=true]:outline-ring/40');
+    expect(option.className).not.toContain('data-[active=true]:bg-primary/10');
+    expect(option.className).toContain('aria-selected:bg-primary/10');
   });
   it('keeps sizing content constant across focus and selection', async () => {
     await render(Select, {
