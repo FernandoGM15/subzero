@@ -9,6 +9,7 @@ import { of } from 'rxjs';
 import { MoneyInput } from './shared/ui/money-input';
 import { DatePicker } from './shared/ui/date-picker';
 import { Card } from './shared/ui/card';
+import { Badge } from './shared/ui/badge';
 
 @Component({
   imports: [
@@ -21,6 +22,7 @@ import { Card } from './shared/ui/card';
     MoneyInput,
     DatePicker,
     Card,
+    Badge,
   ],
   selector: 'app-root',
   template: `
@@ -59,6 +61,14 @@ import { Card } from './shared/ui/card';
         <app-autocomplete label="Select a company" [autocompleteFn]="autocompleteFn" clearable />
       </div>
 
+      <span class="text-xl mb-2 mt-2">Badge</span>
+      <div class="flex flex-wrap gap-2">
+        <app-badge>Neutral</app-badge>
+        <app-badge variant="success">Success</app-badge>
+        <app-badge variant="warning">Warning</app-badge>
+        <app-badge variant="danger">Danger</app-badge>
+      </div>
+
       <span class="text-xl mb-2 mt-2">Card</span>
       <app-card class="max-w-sm">
         <div cardImage class="flex h-32 items-center justify-center bg-surface-muted">
@@ -70,7 +80,6 @@ import { Card } from './shared/ui/card';
           <app-button variant="secondary">View details</app-button>
         </div>
       </app-card>
-
     </div>
   `,
 })

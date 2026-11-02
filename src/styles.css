@@ -29,6 +29,16 @@
   --danger-hover: oklch(0.637 0.237 25.331); /* red-500 */
   --danger-foreground: oklch(1 0 0);
 
+  /* Badge intentions */
+  --badge-neutral: var(--surface-muted);
+  --badge-neutral-foreground: var(--foreground);
+  --badge-success: oklch(0.95 0.05 150);
+  --badge-success-foreground: oklch(0.35 0.1 150);
+  --badge-warning: oklch(0.96 0.08 90);
+  --badge-warning-foreground: oklch(0.38 0.08 75);
+  --badge-danger: oklch(0.95 0.04 25);
+  --badge-danger-foreground: oklch(0.4 0.15 25);
+
   /* Foco */
   --ring: oklch(0.208 0.042 265.755); /* slate-900 */
 }
@@ -47,6 +57,14 @@
   --color-danger-hover: var(--danger-hover);
   --color-danger-foreground: var(--danger-foreground);
   --color-ring: var(--ring);
+  --color-badge-neutral: var(--badge-neutral);
+  --color-badge-neutral-foreground: var(--badge-neutral-foreground);
+  --color-badge-success: var(--badge-success);
+  --color-badge-success-foreground: var(--badge-success-foreground);
+  --color-badge-warning: var(--badge-warning);
+  --color-badge-warning-foreground: var(--badge-warning-foreground);
+  --color-badge-danger: var(--badge-danger);
+  --color-badge-danger-foreground: var(--badge-danger-foreground);
 }
 
 /* Tokens sin runtime: se definen directo (generan la utilidad `rounded-control`). */

@@ -42,6 +42,9 @@ describe('App', () => {
     expect(compiled.querySelector('app-input')).toBeTruthy();
     expect(compiled.querySelector('app-select')).toBeTruthy();
     expect(compiled.querySelector('app-autocomplete')).toBeTruthy();
+    expect(
+      Array.from(compiled.querySelectorAll('app-badge'), (badge) => badge.textContent?.trim()),
+    ).toEqual(['Neutral', 'Success', 'Warning', 'Danger']);
     const card = compiled.querySelector('app-card');
     expect(card?.querySelector('img')?.getAttribute('alt')).toBe('SubZero logo');
     expect(card?.querySelector('h2')?.textContent).toContain('Subscription');

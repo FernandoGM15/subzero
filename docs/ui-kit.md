@@ -16,6 +16,7 @@ Contrato de los componentes de `src/app/shared/ui`.
 
 | Componente                        | Selector              | Estado               | Pruebas                                                                                 |
 | --------------------------------- | --------------------- | -------------------- | --------------------------------------------------------------------------------------- |
+| [Badge](#badge)                   | `app-badge`           | Implementado         | [badge.spec.ts](../src/app/shared/ui/badge/badge.spec.ts)                               |
 | [Card](#card)                     | `app-card`            | Implementado         | [card.spec.ts](../src/app/shared/ui/card/card.spec.ts)                                  |
 | [Button](#button)                 | `app-button`          | Implementado         | [button.spec.ts](../src/app/shared/ui/button/button.spec.ts)                            |
 | [Spinner](#spinner)               | `app-spinner`         | Implementado         | [spinner.spec.ts](../src/app/shared/ui/spinner/spinner.spec.ts)                         |
@@ -23,6 +24,17 @@ Contrato de los componentes de `src/app/shared/ui`.
 | [Select](#select)                 | `app-select`          | Implementado         | [select.spec.ts](../src/app/shared/ui/select/select.spec.ts)                            |
 | [FieldContainer](#fieldcontainer) | `app-field-container` | Interno implementado | [field-container.spec.ts](../src/app/shared/ui/field-container/field-container.spec.ts) |
 | [DatePicker](#datepicker)         | `app-date-picker`     | Implementado         | [date-picker.spec.ts](../src/app/shared/ui/date-picker/date-picker.spec.ts)             |
+
+## Badge
+
+Indicador visual no interactivo para texto proporcionado por el consumidor. Importar `Badge` desde
+`shared/ui/badge` y usar `app-badge`. La propiedad `variant` acepta `neutral` (predeterminada),
+`success`, `warning` y `danger`. La intención visual no sustituye el texto: el consumidor comunica
+el significado y traduce sus estados de negocio. Badge no agrega roles ni anuncia cambios.
+
+```html
+<app-badge variant="success">Active</app-badge>
+```
 
 ## Card
 
