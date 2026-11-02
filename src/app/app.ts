@@ -8,9 +8,20 @@ import { Autocomplete, AutocompleteFn } from './shared/ui/autocomplete';
 import { of } from 'rxjs';
 import { MoneyInput } from './shared/ui/money-input';
 import { DatePicker } from './shared/ui/date-picker';
+import { Card } from './shared/ui/card';
 
 @Component({
-  imports: [RouterOutlet, Button, Spinner, Input, Select, Autocomplete, MoneyInput, DatePicker],
+  imports: [
+    RouterOutlet,
+    Button,
+    Spinner,
+    Input,
+    Select,
+    Autocomplete,
+    MoneyInput,
+    DatePicker,
+    Card,
+  ],
   selector: 'app-root',
   template: `
     <div class="flex flex-col p-4">
@@ -47,6 +58,19 @@ import { DatePicker } from './shared/ui/date-picker';
       <div class="field-grid gap-2">
         <app-autocomplete label="Select a company" [autocompleteFn]="autocompleteFn" clearable />
       </div>
+
+      <span class="text-xl mb-2 mt-2">Card</span>
+      <app-card class="max-w-sm">
+        <div cardImage class="flex h-32 items-center justify-center bg-surface-muted">
+          <img src="favicon.ico" alt="SubZero logo" class="size-16" />
+        </div>
+        <h2 cardTitle class="text-lg font-semibold">Subscription</h2>
+        <p cardContent>Manage your recurring expenses in one place.</p>
+        <div cardFooter>
+          <app-button variant="secondary">View details</app-button>
+        </div>
+      </app-card>
+
     </div>
   `,
 })
